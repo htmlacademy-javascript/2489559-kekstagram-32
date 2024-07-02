@@ -67,16 +67,13 @@ const postComments = () => ({
   name: getRandomArrayElement(nameVariants),
 });
 
-const similarComments = Array.from({length: getRandomInteger(0, 30)}, postComments);
-
-
 // Создание поста
 const createPost = () => ({
   id: idNumber(),
   avatar: `photos/${urlPhoto()}.jpg`,
   description: getRandomArrayElement(descriptionText),
   likes: likesCount(),
-  comments: similarComments,
+  comments: Array.from({length: getRandomInteger(0, 30)}, postComments),
 });
 
 // Генератор 25 постов
