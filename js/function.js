@@ -37,6 +37,8 @@ checkPalindromLength('ДовОд'); // true
 checkPalindromLength('Кекс'); // false
 // Это палиндром
 checkPalindromLength('Лёша на полке клопа нашёл '); // true
+// Это палиндром
+checkPalindromLength('Лёша на полке клопа нашёл '); // true
 
 function containsOnlyNumbers(str) {
   let number = '';
