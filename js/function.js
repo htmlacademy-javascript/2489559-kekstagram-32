@@ -37,8 +37,6 @@ checkPalindromLength('ДовОд'); // true
 checkPalindromLength('Кекс'); // false
 // Это палиндром
 checkPalindromLength('Лёша на полке клопа нашёл '); // true
-// Это палиндром
-checkPalindromLength('Лёша на полке клопа нашёл '); // true
 
 function containsOnlyNumbers(str) {
   let number = '';
@@ -56,3 +54,29 @@ containsOnlyNumbers('1 кефир, 0.5 батона'); // 105
 containsOnlyNumbers('агент 007'); // 7
 containsOnlyNumbers('а я томат'); // NaN
 
+// Задание Функции возвращаются
+function toMinutes (array) {
+  const arrayMinutes = array.split(':');
+  arrayMinutes[0] *= 60;
+  arrayMinutes[1] *= 1;
+  const startArray = arrayMinutes.reduce((acc, number) => acc + number, 0);
+  return startArray;
+}
+
+function conversationCheck(timeStart, timeEnd, conversationStart, conversationLasting) {
+  const start = toMinutes(timeStart);
+  const end = toMinutes(timeEnd);
+  const conversation = toMinutes(conversationStart);
+  const duration = conversation + conversationLasting;
+
+  if (duration <= end && conversation >= start && conversation < end) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+conversationCheck('08:00', '17:30', '14:00', 90); // true
+conversationCheck('8:0', '10:0', '8:0', 120); // true
+conversationCheck('14:00', '17:30', '08:0', 90); // false
+conversationCheck('8:00', '17:30', '08:00', 900); // false
