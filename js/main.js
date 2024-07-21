@@ -1,3 +1,4 @@
 import {similarPosts} from './data.js';
+import {generateThumbnails} from './thumbnail.js';
 
-similarPosts();
+generateThumbnails(similarPosts());
