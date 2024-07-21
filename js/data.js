@@ -48,7 +48,7 @@ const postComments = () => ({
 // Создание поста
 const createPost = () => ({
   id: idNumber(),
-  avatar: `photos/${urlPhoto()}.jpg`,
+  url: `photos/${urlPhoto()}.jpg`,
   description: getRandomArrayElement(descriptionTexts),
   likes: likesCount(),
   comments: Array.from({length: getRandomInteger(0, 30)}, postComments),
