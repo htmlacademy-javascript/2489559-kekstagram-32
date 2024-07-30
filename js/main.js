@@ -1,4 +1,4 @@
-import {similarPosts} from './data.js';
-import {generateThumbnails} from './thumbnail.js';
+import { similarPosts } from './data.js';
+import { renderGallery } from './gallery.js';
 
-generateThumbnails(similarPosts());
+renderGallery(similarPosts());
