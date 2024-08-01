@@ -2,7 +2,6 @@ import {getRandomArrayElement} from './util.js';
 import {createRandomIdFromRangeGenerator} from './util.js';
 import {getRandomInteger} from './util.js';
 
-const idNumber = createRandomIdFromRangeGenerator(1, 25); // уникальный идентификатор
 const urlPhoto = createRandomIdFromRangeGenerator(1, 25); // уникальная фотография
 const likesCount = createRandomIdFromRangeGenerator(15, 200); // от 15 до 200 количество лайков
 
@@ -34,7 +33,7 @@ const messages = [
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-  'ица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
 // Создание комментариев к посту
@@ -46,8 +45,8 @@ const postComments = () => ({
 });
 
 // Создание поста
-const createPost = () => ({
-  id: idNumber(),
+const createPost = (index) => ({
+  id: index,
   url: `photos/${urlPhoto()}.jpg`,
   description: getRandomArrayElement(descriptionTexts),
   likes: likesCount(),
@@ -55,6 +54,9 @@ const createPost = () => ({
 });
 
 // Генератор 25 постов
-const similarPosts = () => (Array.from({length: 25}, createPost));
+const similarPosts = () => Array.from(
+  {length: 25},
+  (_, pictureIndex) => createPost(pictureIndex + 1)
+);
 
 export {similarPosts};
