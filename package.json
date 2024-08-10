@@ -13,7 +13,7 @@
   "devDependencies": {
     "eslint": "8.48.0",
     "eslint-config-htmlacademy": "9.1.1",
-    "vite": "4.4.9"
+    "vite": "^4.5.3"
   },
   "license": "MIT",
   "scripts": {
@@ -24,5 +24,8 @@
     "node": "18",
     "npm": "9"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "pristinejs": "^1.1.0"
+  }
 }
