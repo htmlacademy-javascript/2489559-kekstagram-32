@@ -1,3 +1,4 @@
+import {destroyFilters, initFilters} from './filters.js';
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const ErrorText = {
   INVALID_COUNT: 'Максимум 5 хештегов',
@@ -22,6 +23,7 @@ const showModal = () => {
   overlay.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown',onDocumentKeydown);
+  initFilters();
 };
 
 const hideModal = () => {
@@ -30,6 +32,7 @@ const hideModal = () => {
   overlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown',onDocumentKeydown);
+  destroyFilters();
 };
 
 const onFileInputChange = () => {
