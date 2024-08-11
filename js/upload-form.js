@@ -12,6 +12,7 @@ const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const fileField = document.querySelector('.img-upload__input');
 const hashtagField = document.querySelector('.text__hashtags');
+const submitButtonElement = document.querySelector('.img-upload__submit');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -56,13 +57,33 @@ const hasUniqueTags = (value) => {
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
 };
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  pristine.validate();
+const submitFormTexts = {
+  IDLE: 'Опубликовать',
+  SUBMITTING: 'Отправляем',
 };
 
+const togleSubmitButton = (isDisabled) => {
+  submitButtonElement.disabled = isDisabled;
+  submitButtonElement.textContent = isDisabled
+    ? submitFormTexts.SUBMITTING
+    : submitFormTexts.IDLE;
+};
+const onFormSubmit = (callback) => {
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      togleSubmitButton(true);
+      await callback(new FormData(form));
+      togleSubmitButton();
+    }
+  });
+};
+
+const isErrorMesageShown = () => Boolean(document.querySelector('.error'));
+
 function onDocumentKeydown (evt) {
-  if (evt.key === 'Escape') {
+  if (evt.key === 'Escape' && !isErrorMesageShown) {
     evt.preventDefault();
     hideModal();
   }
@@ -92,4 +113,5 @@ pristine.addValidator(
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
-form.addEventListener('submit', onFormSubmit);
+
+export {onFormSubmit, hideModal};
