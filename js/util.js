@@ -68,6 +68,7 @@ const showSuccessUploadMessage = () => {
 const showErrorUploadMessage = () => {
   const cloned = errorTemplate.cloneNode(true);
   const errorButton = cloned.querySelector('.error__button');
+  const closeError = () => document.querySelector('.error').remove();
 
   const closeForm = () => {
     document.removeEventListener('keydown', onEscape);
@@ -85,11 +86,11 @@ const showErrorUploadMessage = () => {
 
   function onEscape(e) {
     if (e.key === 'Escape') {
-      closeForm();
+      closeError();
     }
   }
   body.addEventListener('click', onBodyClickError);
-  errorButton.addEventListener('click', hideModal);
+  errorButton.addEventListener('click', closeError);
   document.body.insertAdjacentElement('beforeend', cloned);
   document.addEventListener('keydown', onEscape);
 };
