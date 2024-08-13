@@ -16,6 +16,7 @@ const hashtagField = document.querySelector('.text__hashtags');
 const submitButtonElement = document.querySelector('.img-upload__submit');
 const previevPhoto = document.querySelector('.img-upload__preview').querySelector('img');
 const photoEffects = document.querySelectorAll('.effects__preview');
+const textField = document.querySelector('.text__description');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -95,11 +96,12 @@ const onFormSubmit = (callback) => {
     }
   });
 };
+const isTextHashtagActive = () => document.activeElement === hashtagField || document.activeElement === textField;
 
 const isErrorMesageShown = () => Boolean(document.querySelector('.error'));
 
 function onDocumentKeydown (evt) {
-  if (evt.key === 'Escape' && !isErrorMesageShown) {
+  if (evt.key === 'Escape' && !isErrorMesageShown() && !isTextHashtagActive()) {
     evt.preventDefault();
     hideModal();
   }

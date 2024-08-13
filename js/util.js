@@ -1,4 +1,5 @@
 import { hideModal } from './upload-form.js';
+
 // Рандомайзер
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -26,6 +27,7 @@ const ALERT_SHOW_TIME = 5000;
 const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const body = document.querySelector('body');
 
 const showAlert = () => {
   const dataErrorElement = dataErrorTemplate.cloneNode(true);
@@ -41,15 +43,23 @@ const showSuccessUploadMessage = () => {
 
   const closeModal = () => {
     document.removeEventListener('keydown', onEscape);
+    body.removeEventListener('click', onBodyClickSuccess);
     cloned.remove();
   };
 
+  function onBodyClickSuccess (evt) {
+    if (evt.target.closest('.success__inner')
+    ) {
+      return;
+    }
+    closeModal();
+  }
   function onEscape(e) {
     if (e.key === 'Escape') {
       closeModal();
     }
   }
-
+  body.addEventListener('click', onBodyClickSuccess);
   successButton.addEventListener('click', closeModal);
   document.body.insertAdjacentElement('beforeend', cloned);
   document.addEventListener('keydown', onEscape);
@@ -61,16 +71,24 @@ const showErrorUploadMessage = () => {
 
   const closeForm = () => {
     document.removeEventListener('keydown', onEscape);
+    body.removeEventListener('click', onBodyClickError);
     cloned.remove();
     hideModal();
   };
+  function onBodyClickError (evt) {
+    if (evt.target.closest('.error__inner')
+    ) {
+      return;
+    }
+    closeForm();
+  }
 
   function onEscape(e) {
     if (e.key === 'Escape') {
       closeForm();
     }
   }
-
+  body.addEventListener('click', onBodyClickError);
   errorButton.addEventListener('click', hideModal);
   document.body.insertAdjacentElement('beforeend', cloned);
   document.addEventListener('keydown', onEscape);
