@@ -2,9 +2,9 @@ const thumbnailTemplate = document.querySelector('#picture').content.querySelect
 
 const createThumbnail = ({ comments, description, likes, url, id }) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
-
-  thumbnail.querySelector('.picture__img').src = url;
-  thumbnail.querySelector('.picture__img').alt = description;
+  const pictureImgElement = thumbnail.querySelector('.picture__img');
+  pictureImgElement.src = url;
+  pictureImgElement.alt = description;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
   thumbnail.dataset.thumbnailId = id;
