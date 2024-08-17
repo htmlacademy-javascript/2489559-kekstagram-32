@@ -1,6 +1,8 @@
 import {destroyFilters, initFilters} from './filters.js';
+import { resetScale } from './scale.js';
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const MAX_HASHTAGS = 5;
 const ErrorText = {
   INVALID_COUNT: 'Максимум 5 хештегов',
   NOT_UNIQUE: 'Хештеги не должны повторяться',
@@ -14,7 +16,7 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const fileField = document.querySelector('.img-upload__input');
 const hashtagField = document.querySelector('.text__hashtags');
 const submitButtonElement = document.querySelector('.img-upload__submit');
-const previevPhoto = document.querySelector('.img-upload__preview').querySelector('img');
+const previewPhoto = document.querySelector('.img-upload__preview').querySelector('img');
 const photoEffects = document.querySelectorAll('.effects__preview');
 const textField = document.querySelector('.text__description');
 
@@ -33,6 +35,7 @@ const showModal = () => {
 
 const hideModal = () => {
   form.reset();
+  resetScale();
   pristine.reset();
   overlay.classList.add('hidden');
   body.classList.remove('modal-open');
@@ -49,9 +52,9 @@ const isValidPhoto = (photo) => {
 const onFileInputChange = () => {
   const file = fileField.files[0];
   if (file && isValidPhoto(file)) {
-    previevPhoto.src = URL.createObjectURL(file);
+    previewPhoto.src = URL.createObjectURL(file);
     photoEffects.forEach((preview) => {
-      preview.style.backgroundImage = `url('${previevPhoto.src}')`;
+      preview.style.backgroundImage = `url('${previewPhoto.src}')`;
     });
   }
   showModal();
@@ -66,7 +69,7 @@ const hasValidTags = (value) => normalizeTags(value).every((tag) => VALID_SYMBOL
 
 const hasValidCount = (value) => {
   const array = normalizeTags(value);
-  return array.length <= 5;
+  return array.length <= MAX_HASHTAGS;
 };
 
 const hasUniqueTags = (value) => {
@@ -79,7 +82,7 @@ const submitFormTexts = {
   SUBMITTING: 'Отправляем',
 };
 
-const togleSubmitButton = (isDisabled) => {
+const toggleSubmitButton = (isDisabled) => {
   submitButtonElement.disabled = isDisabled;
   submitButtonElement.textContent = isDisabled
     ? submitFormTexts.SUBMITTING
@@ -90,9 +93,9 @@ const onFormSubmit = (callback) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
-      togleSubmitButton(true);
+      toggleSubmitButton(true);
       await callback(new FormData(form));
-      togleSubmitButton();
+      toggleSubmitButton();
     }
   });
 };

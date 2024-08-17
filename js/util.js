@@ -1,5 +1,5 @@
-import { hideModal } from './upload-form.js';
 
+const ALERT_SHOW_TIME = 5000;
 // Рандомайзер
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -23,11 +23,50 @@ function createRandomIdFromRangeGenerator (min, max) {
   };
 }
 
-const ALERT_SHOW_TIME = 5000;
+
 const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const body = document.querySelector('body');
+
+function hideMessage() {
+  const messageElement = document.querySelector('.success') || document.querySelector('.error');
+  messageElement.remove();
+  document.removeEventListener('keydown', onDocumentKeyDown);
+  body.removeEventListener('click', onBodyClick);
+}
+
+function onBodyClick(evt) {
+  if (
+    evt.target.closest('.success__inner') || evt.target.closest('.error__inner')
+  ) {
+    return;
+  }
+  hideMessage();
+}
+
+function onDocumentKeyDown(evt) {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    hideMessage();
+  }
+}
+
+const showMessage = (messageElement, closeButtonClass) => {
+  body.append(messageElement);
+  document.addEventListener('keydown', onDocumentKeyDown);
+  body.addEventListener('click', onBodyClick);
+  messageElement.querySelector(closeButtonClass).addEventListener('click', hideMessage);
+};
+
+const showSuccessMessage = () => {
+  showMessage(successTemplate, '.success__button');
+};
+
+const showErrorMessage = () => {
+  showMessage(errorTemplate, '.error__button');
+};
+
 
 const showAlert = () => {
   const dataErrorElement = dataErrorTemplate.cloneNode(true);
@@ -37,65 +76,7 @@ const showAlert = () => {
   }, ALERT_SHOW_TIME);
 };
 
-const showSuccessUploadMessage = () => {
-  const cloned = successTemplate.cloneNode(true);
-  const successButton = cloned.querySelector('.success__button');
-
-  const closeModal = () => {
-    document.removeEventListener('keydown', onEscape);
-    body.removeEventListener('click', onBodyClickSuccess);
-    cloned.remove();
-  };
-
-  function onBodyClickSuccess (evt) {
-    if (evt.target.closest('.success__inner')
-    ) {
-      return;
-    }
-    closeModal();
-  }
-  function onEscape(e) {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
-  }
-  body.addEventListener('click', onBodyClickSuccess);
-  successButton.addEventListener('click', closeModal);
-  document.body.insertAdjacentElement('beforeend', cloned);
-  document.addEventListener('keydown', onEscape);
-};
-
-const showErrorUploadMessage = () => {
-  const cloned = errorTemplate.cloneNode(true);
-  const errorButton = cloned.querySelector('.error__button');
-  const closeError = () => document.querySelector('.error').remove();
-
-  const closeForm = () => {
-    document.removeEventListener('keydown', onEscape);
-    body.removeEventListener('click', onBodyClickError);
-    cloned.remove();
-    hideModal();
-  };
-  function onBodyClickError (evt) {
-    if (evt.target.closest('.error__inner')
-    ) {
-      return;
-    }
-    closeForm();
-  }
-
-  function onEscape(e) {
-    if (e.key === 'Escape') {
-      closeError();
-    }
-  }
-  body.addEventListener('click', onBodyClickError);
-  errorButton.addEventListener('click', closeError);
-  document.body.insertAdjacentElement('beforeend', cloned);
-  document.addEventListener('keydown', onEscape);
-};
-
-export {showAlert, showErrorUploadMessage, showSuccessUploadMessage};
+export {showAlert, showSuccessMessage, showErrorMessage};
 export {getRandomArrayElement};
 export {createRandomIdFromRangeGenerator};
 export {getRandomInteger};
