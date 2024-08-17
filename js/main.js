@@ -1,23 +1,23 @@
 import { getData, sendData } from './api.js';
 import { renderGallery } from './gallery.js';
 import {onFormSubmit, hideModal} from'./upload-form.js';
-import {showAlert, showErrorUploadMessage, showSuccessUploadMessage} from './util.js';
-import { initial as initFilterss, getFilteredPictures, debounce } from './filter-pictures.js';
+import {showAlert, showErrorMessage, showSuccessMessage} from './util.js';
+import { initial as initializeFilters, getFilteredPictures, debounce } from './filter-pictures.js';
 
 onFormSubmit(async(data) => {
   try {
     await sendData(data);
     hideModal();
-    showSuccessUploadMessage();
+    showSuccessMessage();
   } catch {
-    showErrorUploadMessage();
+    showErrorMessage();
   }
 });
 
 try {
   const data = await getData();
   const debouncedRenderGallery = debounce(renderGallery);
-  initFilterss(data, debouncedRenderGallery);
+  initializeFilters(data, debouncedRenderGallery);
   renderGallery(getFilteredPictures());
 } catch {
   showAlert();
